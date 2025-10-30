@@ -1,0 +1,163 @@
+definitions:
+  controller.TonowPayCallback:
+    properties:
+      confirmId:
+        type: string
+      customerEmail:
+        type: string
+      customerName:
+        type: string
+      customerPhone:
+        type: string
+      documentId:
+        type: string
+      documentNo:
+        type: string
+      paymentChannel:
+        type: string
+      paymentId:
+        type: string
+      referenceId1:
+        type: string
+      referenceId2:
+        type: string
+      referenceId3:
+        type: string
+      referenceId4:
+        type: string
+      referenceId5:
+        type: string
+      transactionAmount:
+        type: string
+      transactionDateandTime:
+        type: string
+      transactionFee:
+        type: string
+      transactionId:
+        type: string
+      transactionName:
+        type: string
+      transactionStatus:
+        type: string
+      transactionTax:
+        type: string
+    type: object
+  types.PaymentRequest:
+    properties:
+      accountChannel:
+        type: string
+      accountId:
+        type: string
+      amount:
+        type: string
+      backgroundUrl:
+        type: string
+      charge:
+        additionalProperties: true
+        type: object
+      customerEmail:
+        type: string
+      customerName:
+        type: string
+      detail:
+        type: string
+      isSMS:
+        type: boolean
+      redirectUrl:
+        type: string
+      referenceId1:
+        type: string
+      referenceId2:
+        type: string
+      referenceId3:
+        type: string
+      referenceId4:
+        type: string
+    type: object
+  types.PaymentResponse:
+    properties:
+      code:
+        type: string
+      data:
+        additionalProperties: true
+        type: object
+      id:
+        type: string
+      message:
+        type: string
+      status:
+        type: string
+      timestamp:
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: This is the API documentation for the Assembly Visual project.
+  termsOfService: http://swagger.io/terms/
+  title: Assembly Visual API documentation
+  version: "1.0"
+paths:
+  /payment:
+    post:
+      consumes:
+      - application/json
+      description: Process a payment request
+      parameters:
+      - description: Payment info
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/types.PaymentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.PaymentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Process Payment
+      tags:
+      - payment
+  /payment/callback:
+    post:
+      consumes:
+      - application/json
+      description: Receive callback from TonowPay after payment success/failure
+      parameters:
+      - description: TonowPay callback payload
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/controller.TonowPayCallback'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Payment Callback (TonowPay)
+      tags:
+      - payment
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
